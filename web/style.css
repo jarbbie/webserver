@@ -1,0 +1,9 @@
+h1 {
+  font-size: 60px;
+}
+
+p {
+  display: inline;
+  font-size: 40px;
+  background: yellow;
+}
