@@ -38,6 +38,7 @@ fn handle_connection(stream: TcpStream) {
             match url {
                 "/" => serve_index(stream),
                 "/style.css" => serve_style(stream),
+                "/script.js" => serve_script(stream),
                 _ => not_found(stream)
             }
         },
@@ -53,7 +54,7 @@ fn serve_index(mut stream: TcpStream) {
     let contents = fs::read_to_string("web/index.html").unwrap();
     let length = contents.len();
 
-    let response = format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
+    let response = format!("{status_line}\r\nContent-Type: text/html\r\nContent-Length: {length}\r\n\r\n{contents}");
 
     stream.write_all(response.as_bytes()).unwrap();
 }
@@ -63,8 +64,18 @@ fn serve_style(mut stream: TcpStream) {
     let contents = fs::read_to_string("web/style.css").unwrap();
     let length = contents.len();
 
-    let response = format!("{status_line}\r\nContent-Length: {length}\r\n\r\n{contents}");
+    let response = format!("{status_line}\r\nContent-Type: text/css\r\nContent-Length: {length}\r\n\r\n{contents}");
     
+    stream.write_all(response.as_bytes()).unwrap();
+}
+
+fn serve_script(mut stream: TcpStream) {
+    let status_line = "HTTP/1.1 200 OK";
+    let contents = fs::read_to_string("web/script.js").unwrap();
+    let length = contents.len();
+
+    let response = format!("{status_line}\r\nContent-Type: application/javascript\r\nContent-Length: {length}\r\n\r\n{contents}");
+
     stream.write_all(response.as_bytes()).unwrap();
 }
 
