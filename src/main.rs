@@ -5,7 +5,7 @@ use std::{
 };
 
 fn main() {
-    let endpoint = "127.0.0.1:7878";
+    let endpoint = "0.0.0.0:7878";
     let listener = TcpListener::bind(endpoint).unwrap();
 
     println!("The server is running at http://{endpoint}");
@@ -58,11 +58,20 @@ fn handle_connection(mut stream: TcpStream) {
         "GET" => serve_get(path),
         "POST" => serve_post(path),
         "DELETE" => serve_delete(path),
-        _ => method_not_allowed_405(path)
-    }
+        _ => {
+            method_not_allowed_405();
+            return;
+        }
+    };
+
+    stream.write_all(response.as_bytes()).unwrap();
 }
 
-fn serve_get() {}
+fn serve_get() {
+    match path {
+
+    }
+}
 
 fn serve_post() {}
 
