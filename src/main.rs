@@ -5,7 +5,7 @@ use std::{
 };
 
 fn main() {
-    let endpoint = "0.0.0.0:7878";
+    let endpoint = "127.0.0.1:7878";
     let listener = TcpListener::bind(endpoint).unwrap();
 
     println!("The server is running at http://{endpoint}");
@@ -26,7 +26,7 @@ fn handle_connection(mut stream: TcpStream) {
     let (Some(method), Some(path), Some(version), None) = (parts.next(), parts.next(), parts.next(), parts.next())
     else {
         // TODO: 400 Bad Request: malformed request_line
-        bad_request_400();
+        bad_request_400(&mut stream);
         return;
     };
     
@@ -54,6 +54,7 @@ fn handle_connection(mut stream: TcpStream) {
     }
     */ 
 
+    /*
     let response = match method {
         "GET" => serve_get(path),
         "POST" => serve_post(path),
@@ -76,10 +77,15 @@ fn serve_get() {
 fn serve_post() {}
 
 fn serve_delete() {}
+    */
+}
 
-fn bad_request_400() {}
+fn bad_request_400(stream: &mut TcpStream) {
+    stream
+        .write_all(b"HTTP/1.1 400 Bad Request\r\nContent-Length: 0\r\n\r\n")
+        .unwrap();
+}
 
 fn method_not_allowed_405() {}
 
 fn http_version_not_supported_505() {}
-
