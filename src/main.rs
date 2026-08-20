@@ -25,61 +25,55 @@ fn handle_connection(mut stream: TcpStream) {
 
     let (Some(method), Some(path), Some(version), None) = (parts.next(), parts.next(), parts.next(), parts.next())
     else {
-        // TODO: 400 Bad Request: malformed request_line
         bad_request_400(&mut stream);
         return;
     };
     
     if version != "HTTP/1.1" {
-        // TODO: 505 HTTP Version Not Supported
         http_version_not_supported_505(&mut stream);
         return;
     }
 
-    /*
-    match method {
-        "GET" => match path { // success: 200
-            "/" => ,
-            "/style.css" => ,
-            "/script.js" => ,
-            _ => // fail: 404
-        },
-        "POST" => match path { // success: 201
-            
-        },
-        "DELETE" => match path { // success: 204
-        
-        },
-        _ => // 405 Method Not Allowed
-    }
-    */ 
 
-    /*
-    let response = match method {
-        "GET" => serve_get(path),
-        "POST" => serve_post(path),
-        "DELETE" => serve_delete(path),
-        _ => {
-            method_not_allowed_405();
-            return;
-        }
+    match method {
+        "GET" => serve_get(&mut stream, path),
+        // "POST" => serve_post(&mut stream, path),
+        // "DELETE" => serve_delete(&mut stream, path),
+        _ => method_not_allowed_405(&mut stream),
+    }
+}
+
+/*
+ * METHODS
+ */
+fn serve_get(stream: &mut TcpStream, path: &str) {
+    // success: 200 OK, fail: 404 Not Found
+    let (status, file, content_type) = match path {
+        "/" => ("200 OK", "web/index.html", "text/html"),
+        "/style.css" => ("200 OK", "web/style.css", "text/css"),
+        "/script.js" => ("200 OK", "web/script.js", "text/javascript"),
+        _ => ("404 Not Found", "web/status/404.html", "text/html"),
     };
+    let body = fs::read_to_string(file).unwrap();
+    let response = format!(
+        "HTTP/1.1 {status}\r\nContent-Type: {content_type}\r\nContent-Length: {}\r\n\r\n{body}",
+        body.len()
+    );
 
     stream.write_all(response.as_bytes()).unwrap();
 }
 
-fn serve_get() {
-    match path {
+// fn serve_post() {
+//     // success: 201 Created
+// }
 
-    }
-}
+// fn serve_delete() {
+//     // success: 204 No Content
+// }
 
-fn serve_post() {}
-
-fn serve_delete() {}
-    */
-}
-
+/*
+ * HTTP Status Codes
+ */
 fn bad_request_400(stream: &mut TcpStream) {
     stream
         .write_all(b"HTTP/1.1 400 Bad Request\r\nContent-Length: 0\r\n\r\n")
