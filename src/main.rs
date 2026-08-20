@@ -32,7 +32,7 @@ fn handle_connection(mut stream: TcpStream) {
     
     if version != "HTTP/1.1" {
         // TODO: 505 HTTP Version Not Supported
-        http_version_not_supported_505();
+        http_version_not_supported_505(&mut stream);
         return;
     }
 
@@ -86,6 +86,14 @@ fn bad_request_400(stream: &mut TcpStream) {
         .unwrap();
 }
 
-fn method_not_allowed_405() {}
+fn method_not_allowed_405(stream: &mut TcpStream) {
+    stream
+        .write_all(b"HTTP/1.1 405 Method Not Allowed\r\nContent-Length: 0\r\n\r\n")
+        .unwrap();
+}
 
-fn http_version_not_supported_505() {}
+fn http_version_not_supported_505(stream: &mut TcpStream) {
+    stream
+        .write_all(b"HTTP/1.1 505 HTTP Version Not Supported\r\nContent-Length: 0\r\n\r\n")
+        .unwrap();
+}
