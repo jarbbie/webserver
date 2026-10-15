@@ -3,17 +3,21 @@ use std::{
     io::{BufReader, prelude::*},
     net::{TcpListener, TcpStream},
 };
+use webserver::ThreadPool;
 
 fn main() {
-    let endpoint = "127.0.0.1:7878";
+    let endpoint = "127.0.0.1:4242";
     let listener = TcpListener::bind(endpoint).unwrap();
+    let pool = ThreadPool::new(4);
 
     println!("The server is running at http://{endpoint}");
 
     for stream in listener.incoming() {
         let stream = stream.unwrap();
 
-        handle_connection(stream);
+        pool.execute(|| {
+            handle_connection(stream);
+        });
     }
 }
 
