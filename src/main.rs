@@ -60,7 +60,7 @@ fn serve_get(stream: &mut TcpStream, path: &str) {
         "/script.js" => ("200 OK", "web/script.js", "text/javascript"),
         "/sleep" => {
             thread::sleep(Duration::from_secs(5));
-            ("200 OK", "web/index.html", "text,html")
+            ("200 OK", "web/index.html", "text/html")
         },
         _ => ("404 Not Found", "web/status/404.html", "text/html"),
     };
