@@ -1,7 +1,7 @@
 # Webserver
 
 ## What is it?
-This is a small multithreaded HTTP server Rust learning project based on [Chapter 21 of The Rust Programming Language](https://doc.rust-lang.org/stable/book/ch21-00-final-project-a-web-server.html) It runs an HTTP/1.1 server at 127.0.0.1:4242 and handles connection with pools of four threads.
+This is a small multithreaded HTTP server Rust learning project based on [Chapter 21 of The Rust Programming Language](https://doc.rust-lang.org/stable/book/ch21-00-final-project-a-web-server.html) It runs an HTTP/1.1 server at `127.0.0.1:4242` and handles connection with pools of four threads.
 
 ### Implemented Methods
 - [x] GET
