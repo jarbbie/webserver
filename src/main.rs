@@ -2,6 +2,8 @@ use std::{
     fs,
     io::{BufReader, prelude::*},
     net::{TcpListener, TcpStream},
+    time::Duration,
+    thread,
 };
 use webserver::ThreadPool;
 
@@ -56,6 +58,10 @@ fn serve_get(stream: &mut TcpStream, path: &str) {
         "/" => ("200 OK", "web/index.html", "text/html"),
         "/style.css" => ("200 OK", "web/style.css", "text/css"),
         "/script.js" => ("200 OK", "web/script.js", "text/javascript"),
+        "/sleep" => {
+            thread::sleep(Duration::from_secs(5));
+            ("200 OK", "web/index.html", "text,html")
+        },
         _ => ("404 Not Found", "web/status/404.html", "text/html"),
     };
     let body = fs::read_to_string(file).unwrap();
@@ -95,3 +101,4 @@ fn http_version_not_supported_505(stream: &mut TcpStream) {
         .write_all(b"HTTP/1.1 505 HTTP Version Not Supported\r\nContent-Length: 0\r\n\r\n")
         .unwrap();
 }
+
