@@ -18,9 +18,9 @@ This is a small multithreaded HTTP server Rust learning project based on [Chapte
 ### Routes
 |Route|Behavior|
 |---|---|
-|/|web/index.html|
-|/style.css|web/style.css|
-|/script.js|web/script.js|
+|/|serves web/index.html|
+|/style.css|serves web/style.css|
+|/script.js|serves web/script.js|
 |/sleep|waits five seconds, then serves web/index.html|
 
 ## Usage
