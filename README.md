@@ -9,6 +9,11 @@ This is a small multithreaded HTTP server Rust learning project based on [Chapte
 - [ ] PUT
 - [ ] PATCH
 - [ ] DELETE
+- [ ] CONNECT
+- [ ] HEAD
+- [ ] OPTIONS
+- [ ] QUERY
+- [ ] TRACE
 
 ### Response Content-Types
 - text/html
